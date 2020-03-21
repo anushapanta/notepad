@@ -1,0 +1,161 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package anushapanta;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
+/**
+ *
+ * @author student
+ */
+public class NotepadUI extends JFrame{
+    public static void main(String[] args) {
+        NotepadUI notepad=new NotepadUI();
+        notepad.setVisible(true);
+        notepad.setSize(400,400);
+    }
+    
+    public NotepadUI(){
+        super("Notepad");
+        setLayout(new BorderLayout());
+        
+        JMenuBar menuBar=new JMenuBar();
+        setJMenuBar(menuBar);
+        
+        JMenu fileMenu = new JMenu("File");
+        menuBar.add(fileMenu);
+        
+        JMenu editMenu = new JMenu("Edit");
+        menuBar.add(editMenu);
+        
+        JMenu formatMenu = new JMenu("Format");
+        menuBar.add(formatMenu);
+        
+        JMenu viewMenu = new JMenu("View");
+        menuBar.add(viewMenu);
+        
+        JMenu helpMenu = new JMenu("Help");
+        menuBar.add(helpMenu);
+        
+        JMenuItem newMenuItem = new JMenuItem("New");
+        fileMenu.add(newMenuItem);      
+        JMenuItem openMenuItem = new JMenuItem("Open");
+        fileMenu.add(openMenuItem);
+        JMenuItem saveMenuItem = new JMenuItem("Save");
+        fileMenu.add(saveMenuItem);
+        JMenuItem exitMenuItem = new JMenuItem("Exit");
+        fileMenu.add(exitMenuItem);
+        
+        JMenuItem cutMenuItem = new JMenuItem("Cut");
+        editMenu.add(cutMenuItem);
+        JMenuItem copyMenuItem = new JMenuItem("Copy");
+        editMenu.add(copyMenuItem);  
+        JMenuItem pasteMenuItem = new JMenuItem("Paste");
+        editMenu.add(pasteMenuItem);
+        
+        JCheckBoxMenuItem wordwrapitem = new JCheckBoxMenuItem("Word Wrap");
+        formatMenu.add(wordwrapitem);
+        wordwrapitem.setSelected(false);
+        JMenuItem fontMenuItem = new JMenuItem("Font");
+        formatMenu.add(fontMenuItem);
+        
+        JCheckBoxMenuItem viewitem = new JCheckBoxMenuItem("Status Bar");
+        viewMenu.add(viewitem);
+        wordwrapitem.setSelected(false);
+        
+        JMenuItem viewhelpMenuItem = new JMenuItem("View Help");
+        helpMenu.add(viewhelpMenuItem);
+        JMenuItem abouthelpMenuItem = new JMenuItem("About Notepad");
+        helpMenu.add(abouthelpMenuItem);
+        
+        JTextArea textArea = new JTextArea(10,50);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        add(scrollPane);
+        
+        newMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                textArea.setText("");
+            }
+
+        });
+
+        openMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                BufferedReader in = null;
+                try {
+                    in = new BufferedReader(new FileReader("source.txt"));
+                    String line;
+                    while (true) {
+                        line = in.readLine();
+                        if (line == null) {
+                            break;
+                        }
+                        textArea.append(line);
+
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(NotePad.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        });
+
+        saveMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                PrintWriter out = null;
+
+                try {
+                    String title = textArea.getText();
+                    FileWriter fw = new FileWriter(new File("destination.txt"));
+                    fw.write(title);
+                    fw.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(NotePad.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+
+        }
+        );
+
+        exitMenuItem.addActionListener(
+                new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae
+            ) {
+                System.exit(0);
+            }
+
+        }
+        );
+        pack();
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
+    
+}
+
